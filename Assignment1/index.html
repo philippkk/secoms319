@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="author" content="Cole Boltjes and Philip King">
     <meta name="generator" content="Hugo 0.118.2">
-    <title>Album example · Bootstrap v5.3</title>
+    <title>Catalog of minerals</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
 
@@ -18,6 +18,7 @@
 
 <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
   <style href="./catalog.css"></style>
+  <style src="./navbar-fixed.css"></style>
 
     
   </head>
@@ -75,35 +76,28 @@
 
     
 <header data-bs-theme="dark">
-  <div class="collapse text-bg-dark" id="navbarHeader">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8 col-md-7 py-4">
-          <h4>About</h4>
-          <p class="text-body-secondary">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
-        </div>
-        <div class="col-sm-4 offset-md-1 py-4">
-          <h4>Contact</h4>
-          <ul class="list-unstyled">
-            <li><a href="#" class="text-white">Follow on Twitter</a></li>
-            <li><a href="#" class="text-white">Like on Facebook</a></li>
-            <li><a href="#" class="text-white">Email me</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="navbar navbar-dark bg-dark shadow-sm">
-    <div class="container">
-      <a href="#" class="navbar-brand d-flex align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <strong>Album</strong>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Breaking Good Deals</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="./index.html">Minerals</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Lab Gear</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="./page3.html">Credits</a>
+          </li>
+        </ul>
+        
+      </div>
     </div>
-  </div>
+  </nav>
 </header>
 
 <main>
@@ -111,11 +105,11 @@
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">Album example</h1>
-        <p class="lead text-body-secondary">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+        <h1 class="fw-light">Mineral Store</h1>
+        <p class="lead text-body-secondary">Not rocks, minerals!</p>
         <p>
-          <a href="#" class="btn btn-primary my-2">Main call to action</a>
-          <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+          <a href="./page2.html" class="btn btn-primary my-2">Lab Store</a>
+          <a href="./page3.html" class="btn btn-secondary my-2">Contact</a>
         </p>
       </div>
     </div>
@@ -131,7 +125,11 @@
             <div class="card-body">
               <p class="card-text">This is coal. It can be used to create energy by burning it. It is also considered a fossile fuel.</p>
               <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">9 mins</small>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Price:</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" style="color: #288a28;">$3.99</button>
+                </div>
+                <small class="text-body-secondary"> 502 in stock</small>
               </div>
             </div>
           </div>
@@ -142,7 +140,11 @@
             <div class="card-body">
               <p class="card-text">This is galena. It is a mineral known for it's metalic luster. This is because it is actually lead ore.</p>
               <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">9 mins</small>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Price:</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" style="color: #288a28;">$15.99</button>
+                </div>
+                <small class="text-body-secondary"> 87 in stock</small>
               </div>
             </div>
           </div>
@@ -153,7 +155,11 @@
             <div class="card-body">
               <p class="card-text">This is quartz. It is a mineral known to be clear, white, and/or lilac. Fun fact, it emits a small amount of light when it is rubbed against itself.</p>
               <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">9 mins</small>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Price:</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" style="color: #288a28;">$14.99</button>
+                </div>
+                <small class="text-body-secondary"> 57 in stock</small>
               </div>
             </div>
           </div>
@@ -164,7 +170,11 @@
             <div class="card-body">
               <p class="card-text">This is actually 2 minerals: sodalite and feldspare. One of the cool things about minerals, is that they are rarely found alone. Oftentimes, they also form unique structures and mesmerizing patterns.</p>
               <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">9 mins</small>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Price:</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" style="color: #288a28;">$17.99</button>
+                </div>
+                <small class="text-body-secondary"> 133 in stock</small>
               </div>
             </div>
           </div>
@@ -175,13 +185,15 @@
 
 </main>
 
-<footer class="text-body-secondary py-5">
+<footer class="text-body-secondary py-5" id="footer">
   <div class="container">
     <p class="float-end mb-1">
       <a href="#">Back to top</a>
     </p>
-    <p class="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-    <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="../getting-started/introduction/">getting started guide</a>.</p>
+    <p class="mb-1">&copy; Breaking Good Deals</p>
+    <p class="mb-1">Contact: breakingdeals@breakinggooddeals.com 
+        <br> 392-199-2398
+    </p>
   </div>
 </footer>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>

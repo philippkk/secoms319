@@ -1,0 +1,32 @@
+body {
+  min-height: 75rem;
+  background-color: #537ae7;
+}
+nav {
+  text-align: center;
+}
+
+.divider {
+  background-color: #a2b0ee;
+  padding: 25px;
+}
+
+.link {
+  color: black;
+  text-decoration: none;
+}
+.link:hover {
+  transition: color 0.3s ease-in;
+  color: #537ae7;
+  text-decoration: none;
+}
+
+
+.dataContainer {
+  display: flex;
+  justify-content: left;
+}
+.lead {
+  margin-left: 100px;
+  margin-top: 15px;
+}

@@ -42,6 +42,7 @@ function humidityColor(hunidity){
     return color;
 }
 function getData(){
+    console.log("getting data");
     getTempData();
     getHumidityData();
 }
@@ -69,7 +70,6 @@ function setTempColor(back,temp){
 }
 function setHumdityData(data){
     console.log(data);
-
     humid.innerHTML = "<strong>"+data.data[0].humid +"%</strong>";
     humidDate.innerHTML = "<strong>Date: " + data.data[0].date+"</strong>";
 

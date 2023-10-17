@@ -54,16 +54,24 @@
     <div class="divider rounded"></div>
   <div class="bg-body-tertiary p-5 rounded">
     <div class="dataContainer">
-        <h1>
-          <img src="./images/ther.png" alt="ther" style="width: 50px" /><a href="./temperature.html"
-            class="link">Temperature</a>
-        </h1>
-        <p class="lead">DISPLAY DATA HERE</p>
+        <div>
+          <h1>
+            <img src="./images/ther.png" alt="ther" style="width: 50px" /><a href="./temperature.html"
+              class="link">Temperature</a>
+          </h1>
+          <p>little image here depending on data</p>
+        </div>
+        <div>
+          <p id="tempDataF" class="lead rounded">DISPLAY TEMP HERE</p>
+          <p class="lead rounded" id="tempDataC">temp in C here</p>
+          <p class="lead rounded" id="tempDate">date here</p>
+        </div>
       </div>
     </div>
     <div class="divider rounded"></div>
 </main>
 
+<script src="./index.js"></script>
 
     </body>
 </html>

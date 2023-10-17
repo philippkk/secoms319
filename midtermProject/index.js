@@ -19,7 +19,7 @@ let color = "";
 
 
 getData();
-setInterval(getData,600000);
+setInterval(getData,1000);
 
 function tempColor(temp){
     if(temp > 80){
@@ -56,6 +56,7 @@ function getHumidityData(){
     .then(data => setHumdityData(data));
 }
 function setTempData(data){
+    console.log(data);
     tempDataF.innerHTML = "<strong>"+data.data[0].temp_f + "°F</strong>";
     tempDataC.innerHTML = "<strong>"+data.data[0].temp_c + "°C</strong>";
     tempDate.innerHTML = "<strong>Date: " +data.data[0].date+"</strong>";
@@ -67,6 +68,8 @@ function setTempColor(back,temp){
     back.style.backgroundColor = tempColor(temp);
 }
 function setHumdityData(data){
+    console.log(data);
+
     humid.innerHTML = "<strong>"+data.data[0].humid +"%</strong>";
     humidDate.innerHTML = "<strong>Date: " + data.data[0].date+"</strong>";
 

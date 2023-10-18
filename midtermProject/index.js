@@ -21,7 +21,7 @@ let color = "";
 
 
 getData();
-setInterval(getData,100000);
+setInterval(getData,1000);
 
 function tempColor(temp){
     if(temp > 80){
@@ -59,7 +59,8 @@ function getHumidityData(){
     .then(data => setHumdityData(data));
 }
 function setTempData(data){
-    console.log(data);
+    if(tempDataF == null)
+        return;
     tempDataF.innerHTML = "<strong>"+data.data[0].temp_f + "°F</strong>";
     tempDataF.style.padding = '15px';
     tempDataC.innerHTML = "<strong>"+data.data[0].temp_c + "°C</strong>";
@@ -69,12 +70,15 @@ function setTempData(data){
     setTempColor(tempDataF,data.data[0].temp_f);
     setTempColor(tempDataC,data.data[0].temp_f);
     setTempPic(data.data[0].temp_f);
-    setTempAvg(data);
+    if(document.getElementById('t1hour') != null){
+        setTempAvg(data);
+    }
 }
 function setTempColor(back,temp){
     back.style.backgroundColor = tempColor(temp);
 }
 function setTempPic(temp){
+    console.log("setting image");
     if(temp >= 80){
         var num = Math.random() ;
         console.log(num);
@@ -125,14 +129,17 @@ function setTempAvg(data){
 
 
 function setHumdityData(data){
-    console.log(data);
+    if(humid == null)
+        return;
     humid.innerHTML = "<strong>"+data.data[0].humid +"%</strong>";
     humid.style.padding = '15px';
     humidDate.innerHTML = "<strong>Date: " + data.data[0].date+"</strong>";
 
     setHumidColor(data.data[0].humid);
     setHumidPic(data.data[0].humid);
-    setHumidityAvg(data);
+    if(document.getElementById('h1')!= null){
+        setHumidityAvg(data);
+    }
 }
 function setHumidColor(humidity){
     humid.style.backgroundColor = humidityColor(humidity);

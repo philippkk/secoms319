@@ -21,10 +21,22 @@ nav {
   text-decoration: none;
 }
 
-
 .dataContainer {
   display: flex;
   justify-content: left;
+  margin: auto;
+  width: 50%;
+  padding: 0px;
+}
+.dataContainerContainer{
+  
+}
+@media (max-width: 1000px) {
+  .dataContainer {
+    display: flex;
+    justify-content: left;
+  }
+
 }
 .lead {
   margin-left: 100px;

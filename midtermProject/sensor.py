@@ -20,11 +20,10 @@ def insert_str(string, insert, index):
 def upload_data(data_str):
    
    # Replace these with your GitHub repository information
-   repo_owner = "philippkk"#cboltjes
-   repo_name = "secoms319"#pyPushTest
-   file_path = "data.json"#pyPushTest/data.JSON"
-   access_token = "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"
-   #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
+   repo_owner = "philippkk"
+   repo_name = "secoms319"
+   file_path = "data.json"
+   access_token = "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"
    # API URL for updating the file
    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{file_path}"
    

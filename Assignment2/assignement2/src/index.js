@@ -191,17 +191,17 @@ const Handler = () => {
       // ProductsCategory = filtered;
       console.log("Step 5 : ", Products.length, ProductsCategory.length);
     }
-    // function calcPrice() {
-    //   items.map((el) => (total += el.price));
-    // }
-    // calcPrice();
+    function calcPrice() {
+      Products.map((el) => (total += el.price));
+      total = total.toFixed(2);
+    }
+    calcPrice();
     return (
       <div className="flex  flex-row overflow-scroll ">
         <div
           className="h-auto bg-slate-800 p-5 xl:basis-1/5 rounded"
           style={{ minWidth: "65%" }}
         >
-          {/*<img className="w-full" src={logo} alt="Sunset in the mountains" />*/}
           <div className="px-6 py-4">
             <h1 className="text-3xl mb-5 font-bold text-white bg-slate-600 rounded p-3">
               {" "}
@@ -215,7 +215,7 @@ const Handler = () => {
               <h2 className="text-gray-700 text-white">Order Summary:</h2>
               <div class=" grid grid-cols-2 gap-x-5 gap-y-5 content-center overflow-scroll">
                 <div>
-                  {/* {items.map((el) => (
+                  {Products.map((el) => (
                     <div class=" grid grid-cols-2 gap-x-5 gap-y-5 content-center overflow-scroll">
                       <div class="flex">
                         <img
@@ -234,7 +234,7 @@ const Handler = () => {
                         <hr />
                       </p>
                     </div>
-                  ))} */}
+                  ))}
                 </div>
                 <p className="text-gray-700 text-white hover:text-sky-400">
                   {" "}
@@ -259,7 +259,7 @@ const Handler = () => {
   function renderedComponent() {
     switch (state) {
       case 0:
-        return <Catalog />;
+        return <Confirm />;
       case 1:
         return <Cart />;
       case 2:

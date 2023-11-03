@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import { Products } from "./Products";
 import { Categories } from "./Categories";
 
+
+
 const App = () => {
   console.log("Step 1 : load Products in a useState.");
   const [ProductsCategory, setProductsCategory] = useState(Products);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   function handleClick(tag) {
     console.log("Step 4 : in handleClick", tag);
@@ -17,6 +19,23 @@ const App = () => {
     // ProductsCategory = filtered;
     console.log("Step 5 : ", Products.length, ProductsCategory.length);
   }
+
+  const handleChange = (e) => {
+    setQuery(e.target.value);
+    console.log(
+      "Step 6 : in handleChange, Target Value :",
+      e.target.value,
+      " Query Value :",
+      query
+    );
+    const results = Products.filter((eachProduct) => {
+      if (e.target.value === "") return ProductsCategory;
+      return eachProduct.title
+        .toLowerCase()
+        .includes(e.target.value.toLowerCase());
+    });
+    setProductsCategory(results);
+  };
 
   return (
     <div className="flex fixed flex-row">
@@ -50,6 +69,17 @@ const App = () => {
               </button>
             ))}
           </div>
+          <div className="py-10">
+            <input
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
+dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              type="search"
+              value={query}
+              onChange={handleChange}
+            />
+          </div>
         </div>
       </div>
       <div className="ml-5 p-10 xl:basis-4/5">
@@ -65,6 +95,31 @@ const App = () => {
 };
 
 const render_products = (ProductsCategory) => {
+  const increment_product = (el) => {
+    var exists = false;
+    items.map((item)=>{
+      if(item.id == el.id) {
+        item.quantity++;
+        exists = true;
+      }
+    });
+    if(!exists) {
+      el.quantity = 1;
+      items.push(el);
+    }
+  }
+  const decrement_product = (el) => {
+    var qty = 0;
+    for(var i = 0; i < items.length; i++){
+      if(items[i].id == el.id) {
+        items[i].quantity--;
+        if(items[i].quantity <= 0)
+          items[i].splice(i, 1);
+        break;
+      }
+    }
+  }
+
   return (
     <div className="category-section fixed">
       <h2 className="text-3xl font-extrabold tracking-tight text-gray-600 category-title">
@@ -97,6 +152,11 @@ const render_products = (ProductsCategory) => {
                 </h3>
                 <p className="mt-1 text-sm text-gray-500">
                   Rating: {product.rating.rate}
+                </p>
+                <p>
+                {product.quantity}
+                <button onClick={decrement_product}>-</button>
+                <button onClick={increment_product}>+</button>
                 </p>
               </div>
               <p className="text-sm font-medium text-green-600">

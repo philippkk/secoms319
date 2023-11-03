@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import items from "./selected_products.json";
 
 const Shop = () => {
   const [cart, setCart] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
 
   const listItems = items.map((el) => (
-    <div key={el.id}>
+    <div class="block w-max p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700" key={el.id}>
       <img class="img-fluid" src={el.image} width={100} />
-      {el.title}
-      {el.category}
-      {el.price}
+      {el.title}<br/>
+      {el.category}<br/>
+      {el.price}<br/>
+
+      Quantity:
       <button type="button" onClick={() => removeFromCart(el)}>
         -
       </button>{" "}
@@ -52,7 +53,7 @@ const Shop = () => {
   return (
     <div>
       <div>{listItems}</div>
-      <div>Itesm in Cart :</div>
+      <div>Items in Cart :</div>
       <div>{cartItems}</div>
       <div>Order total to pay :{cartTotal}</div>
     </div>

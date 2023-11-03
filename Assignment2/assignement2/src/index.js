@@ -259,7 +259,7 @@ const Handler = () => {
   function renderedComponent() {
     switch (state) {
       case 0:
-        return <Confirm />;
+        return <Catalog />;
       case 1:
         return <Cart />;
       case 2:

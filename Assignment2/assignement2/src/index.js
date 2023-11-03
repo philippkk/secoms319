@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { Products } from "./Products";
 import { Categories } from "./Categories";
@@ -10,39 +10,30 @@ const root = ReactDOM.createRoot(rootElement);
 
 const Handler = () => {
   const [state, setState] = useState(0);
-  const [cardNum, setCardNum] = useState(0);
-  let items = [];
+  const [personalInfo, setCardNum] = useState({name:"", cardNum:"", address:""});
+  const [ProductsCategory, setProductsCategory] = useState(Products);
+  const [cart, setCart] = useState([]);
   let total = 0;
 
-  function Catalog() {
-    console.log("Step 1 : load Products in a useState.");
-    const [ProductsCategory, setProductsCategory] = useState(Products);
+  const Catalog = () => {
+    const [catalogItems, setCatalogItems] = useState(ProductsCategory);
     const [query, setQuery] = useState("");
 
-    function handleClick(tag) {
-      console.log("Step 4 : in handleClick", tag);
-      let filtered = Products.filter((cat) => cat.category === tag);
+    const handleClick = (tag) => {
+      let filtered = ProductsCategory.filter((cat) => cat.category === tag);
       // modify useState
-      setProductsCategory(filtered);
-      // ProductsCategory = filtered;
-      console.log("Step 5 : ", Products.length, ProductsCategory.length);
-    }
+      setCatalogItems(filtered);
+    };
 
     const handleChange = (e) => {
       setQuery(e.target.value);
-      console.log(
-        "Step 6 : in handleChange, Target Value :",
-        e.target.value,
-        " Query Value :",
-        query
-      );
-      const results = Products.filter((eachProduct) => {
-        if (e.target.value === "") return ProductsCategory;
+      const results = ProductsCategory.filter((eachProduct) => {
+        if (e.target.value === "") return catalogItems;
         return eachProduct.title
           .toLowerCase()
           .includes(e.target.value.toLowerCase());
       });
-      setProductsCategory(results);
+      setCatalogItems(results);
     };
 
     return (
@@ -60,7 +51,7 @@ const Handler = () => {
             <p className="text-gray-700 text-white">
               by -{" "}
               <b style={{ color: "orange" }}>
-                Design Shubham, Development Abraham
+                Design Philip King, Development Cole Boltjes
               </b>
             </p>
             <div className="py-10">
@@ -88,43 +79,71 @@ const Handler = () => {
                 onChange={handleChange}
               />
             </div>
+            <div>
+              <button
+                onClick={() => {
+                  setState(1);
+                  setCart(catalogItems.filter((prod) => prod.quantity > 0));
+                  setCatalogItems(ProductsCategory);
+                }}
+              >
+                View Cart
+              </button>
+            </div>
           </div>
         </div>
         <div className="ml-5 p-10 xl:basis-4/5">
           {console.log(
             "Before render :",
-            Products.length,
-            ProductsCategory.length
+            ProductsCategory.length,
+            catalogItems.length
           )}
-          {render_products(ProductsCategory)}
+          {Render_products(catalogItems, false)}
         </div>
       </div>
     );
-  }
+  };
 
-  const render_products = (ProductsCategory) => {
-    const increment_product = (el) => {
-      var exists = false;
-      items.map((item) => {
-        if (item.id == el.id) {
-          item.quantity++;
-          exists = true;
-        }
-      });
-      if (!exists) {
-        el.quantity = 1;
-        items.push(el);
-      }
-    };
-    const decrement_product = (el) => {
-      var qty = 0;
-      for (var i = 0; i < items.length; i++) {
-        if (items[i].id == el.id) {
-          items[i].quantity--;
-          if (items[i].quantity <= 0) items[i].splice(i, 1);
-          break;
-        }
-      }
+  const Render_products = (ProductsCategory, cartView) => {
+    const [fresh, setFresh] = useState(false);
+    function refresh() {
+      setFresh(!fresh);
+    }
+    const EndDescription = (product, index, cartView) => {
+      if(!cartView)
+        return Counter(product, index);
+      return ProductTotal(product);
+    }
+
+    const ProductTotal = (product) => {
+      return <div>
+        Product Total: {("$" + (product.quantity * product.price).toFixed(2))}
+      </div>
+    }
+
+    const Counter = (ignore, index) => {
+      const setQty = (val) => {
+        ProductsCategory[index].quantity = val;
+        refresh();
+      };
+
+      return (
+        <div>
+          <input
+            style={{ width: "100%" }}
+            id={"counterNum" + index}
+            type="number"
+            value={ProductsCategory[index].quantity}
+            onChange={(e) => {
+              var val = isNaN(parseInt(e.target.value))
+                ? 0
+                : Math.max(parseInt(e.target.value), 0);
+              e.target.value = val;
+              setQty(val);
+            }}
+          ></input>
+        </div>
+      );
     };
 
     return (
@@ -150,7 +169,6 @@ const Handler = () => {
                 <div>
                   <h3 className="text-sm text-gray-700">
                     <a href={product.href}>
-                      <span aria-hidden="true" className="absolute inset-0" />
                       <span style={{ fontSize: "16px", fontWeight: "600" }}>
                         {product.title}
                       </span>
@@ -160,11 +178,7 @@ const Handler = () => {
                   <p className="mt-1 text-sm text-gray-500">
                     Rating: {product.rating.rate}
                   </p>
-                  <p>
-                    {product.quantity}
-                    <button onClick={decrement_product}>-</button>
-                    <button onClick={increment_product}>+</button>
-                  </p>
+                  <div>{EndDescription(product, index, cartView)}</div>
                 </div>
                 <p className="text-sm font-medium text-green-600">
                   ${product.price}
@@ -176,9 +190,40 @@ const Handler = () => {
       </div>
     );
   };
-  function Cart() {
-    return <h1>hi</h1>;
-  }
+
+  const Cart = () => {
+    function total(){
+      let totalVal = 0;
+      for (let i = 0; i < cart.length; i++) {
+        totalVal += cart[i].price;
+      }
+      return ("$" + totalVal.toFixed(2));
+    };
+
+
+    const payment_info = () => {
+      return (<div>
+      </div>);
+    }
+
+    if (cart.length === 0)
+      return (
+        <div>
+        <button onClick={()=>{setState(0)}}>Return to Store</button>
+          <div>No Items in Cart</div>
+        </div>
+      );
+
+    return (
+      <div>
+          <button onClick={()=>{setState(0)}}>Return to Store</button>
+        <div>Order total: {total()}</div>
+        <div>{payment_info}</div>
+        <div>{Render_products(cart, true)}</div>
+      </div>
+    );
+  };
+  
   function Confirm() {
     const [ProductsCategory, setProductsCategory] = useState(Products);
     const [query, setQuery] = useState("");
@@ -259,7 +304,7 @@ const Handler = () => {
   function renderedComponent() {
     switch (state) {
       case 0:
-        return <Confirm />;
+        return <Catalog />;
       case 1:
         return <Cart />;
       case 2:

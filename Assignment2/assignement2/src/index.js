@@ -661,7 +661,9 @@ const Handler = () => {
                   className="text-white"
                   onClick={() => {
                     setState(0);
-                    //RESET CART HERE!!!!!!!!
+                    for(var i = 0; i < ProductsCategory.length; i++) {
+                      ProductsCategory[i].quantity = 0;
+                    }
                   }}
                 >
                   Make New Purchase!

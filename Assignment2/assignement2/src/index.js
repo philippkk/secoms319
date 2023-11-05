@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { Products } from "./Products";
+import Products from "./Products.json";
 import { Categories } from "./Categories";
 import "./index.css";
-import Shop from "./shopping.js";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import Products from "./Products.json";
-import { Categories } from "./Categories";
 import "./index.css";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
+
+const Categories = ["electronics", "jewelery", "men's clothing", "women's clothing"];
 
 const Handler = () => {
   const [state, setState] = useState(0);
@@ -119,7 +120,8 @@ const Handler = () => {
     const ProductTotal = (product) => {
       return (
         <div>
-          Product Total: {"$" + (product.quantity * product.price).toFixed(2)}
+          Qty: {product.quantity}<br />
+          Total: {"$" + (product.quantity * product.price).toFixed(2)}
         </div>
       );
     };

@@ -86,7 +86,7 @@ const Handler = () => {
                   src="./cart.png"
                   onClick={() => {
                     setState(1);
-                    setCart(catalogItems.filter((prod) => prod.quantity > 0));
+                    setCart(ProductsCategory.filter((prod) => prod.quantity > 0));
                     setCatalogItems(ProductsCategory);
                   }}
                 ></img>

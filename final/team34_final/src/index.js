@@ -5,6 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+let state = 0;
+
 root.render(
   <React.StrictMode>
     <Handler />
@@ -52,6 +54,11 @@ from that itll just be a ton of js to load everything into their proper containe
 
 function Handler(){
 
+  switch(state){
+    case 0:
+      //state whatever
+      break;
+  }
 
   return(
     <div>

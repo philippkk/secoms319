@@ -1,24 +1,69 @@
-
 var express = require("express");
 var cors = require("cors");
 var app = express();
 var fs = require("fs");
 var bodyParser = require("body-parser");
+const { MongoClient } = require("mongodb");
+const uri =
+"mongodb+srv://philipk:7EwTM0DwxWI1xNAd@coms363.c2vkqro.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri);
+const db = client.db("coms319");
+
 app.use(cors());
 app.use(bodyParser.json());
 const port = "8081";
 const host = "localhost";
 
+async function main() {
+
+  try {
+    // Connect to the MongoDB cluster
+    await client.connect();
+
+    // Make the appropriate DB calls
+    await listDatabases(client);
+
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
+
+main().catch(console.error);
+async function listDatabases(client){
+  databasesList = await client.db().admin().listDatabases();
+
+  console.log("Databases:");
+  databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+};
+
 app.listen(port, () => {
   console.log("App listening at http://%s:%s", host, port);
 });
 
+app.get("/hi", async(req, res) => {
+  await client.connect();
+  console.log("Node connected successfully to GET MongoDB");
+  const results = await db
+  .collection("users").find({}).toArray();
+  console.log(results);
+  res.status(200);
+  res.send(results);
+});
 
-app.get("/hi", (req, res) => {
-  // fs.readFile(__dirname + "/" + "robots.json", "utf8", (err, data) => {
-  // console.log(data);
-  // res.status(200);
-  // res.send(data);
-  // });
-    console.log("hi node js");
-  });
+app.post("/addUser",async(req,res)=>{
+  await client.connect();
+  const keys = Object.keys(req.body);
+  const values = Object.values(req.body);
+  const userName = values[0];
+  const password = values[1];
+  const newUser = {
+    "userName" : userName,
+    "password" : password
+  }
+  const results = await db.collection("users").insertOne(newUser);
+  res.status(200);
+  res.send(results);
+
+});

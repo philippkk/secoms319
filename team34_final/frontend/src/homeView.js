@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import p from "./Projects.json"; // Delete when DB's incorporated
 import ProjectView from "./projectView";
 
+
 const Home = () => {
   // Hook, if user is blank, will display login, else can be used to quiery projects
   const [user, setUser] = useState("");
@@ -31,27 +32,64 @@ const Home = () => {
     setUser(username);
   }
 
+  function get(){
+    fetch('http://localhost:8081/hi')
+    .then(response => response.json())
+    .then(data =>{
+      console.log(data);
+      var container = document.getElementById("output");
+      container.innerHTML = `<h1>${data[0].userName} ${data[0].password}</h1>`;
+    })
+  }
+  function signUp(name,pass){
+    fetch('http://localhost:8081/addUser', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+          "userName": name,
+          "password": pass
+      })
+  })
+      .then(response => response.json())
+      .then(data => {
+
+      });
+  }
   if (user === "")
     // Return login
     return (
-      <div id="background">
-        <div id="login">
-          <h1>Login</h1>
-          <input
+      <div id="background" className="h-screen bg-brown p-10 flex">
+        <div id="login" className=" bg-back-blue/90 p-10 m-1 w-2/6 text-center rounded ">
+          <h1 class="text-white p-2 text-3xl ">Login</h1>
+          <div>
+          <input 
+           className="bg-indigo-300 placeholder-stone-700 p-1 m-1 w-11/12 text-center rounded h-14 text-xl"
             id="username"
             onChange={handleUsernameChange}
             placeholder="Username"
           />
+          </div>
+          <div>
           <input
+          className="bg-indigo-400 placeholder-stone-700  p-1 m-1 w-11/12 text-center rounded h-14 mt-2 text-xl"
             id="password"
             onChange={handlePasswordChange}
             type="password"
             placeholder="Password"
           />
-          <button id="submit" onClick={submit}>
+          </div>
+          <div>
+          <button class="text-white p-2 mt-5 text-2xl bg-indigo-300 rounded" id="submit" onClick={submit}>
             Submit
           </button>
+          </div>
         </div>
+        <div id="projects" className=" bg-back-blue/90 p-10 m-1 w-4/6 rounded flex justify-center items-center">
+          <h1 class="text-white text-center text-2xl">...To view projects, please sign in or sign up...</h1>
+        
+        </div>
+
+
       </div>
     );
   // Return Projects
@@ -74,9 +112,41 @@ const Projects = ({ user, refresh, setProject}) => {
 
   return (
     <div>
-      <h1>Select Project</h1>
-      <div>{projectTabs}</div>
+      <div id="background" className="h-screen bg-brown p-10 flex">
+        <div id="login" className=" bg-back-blue/90 p-10 m-1 w-2/6 text-center rounded ">
+          <h1 class="text-white p-2 text-3xl ">Login</h1>
+          <div>
+          <input 
+           className="bg-indigo-300 placeholder-stone-700 p-1 m-1 w-11/12 text-center rounded h-14 text-xl"
+            id="username"
+            placeholder="Username"
+          />
+          </div>
+          <div>
+          <input
+          className="bg-indigo-400 placeholder-stone-700  p-1 m-1 w-11/12 text-center rounded h-14 mt-2 text-xl"
+            id="password"
+            type="password"
+            placeholder="Password"
+          />
+          </div>
+          <div>
+          <button class="text-white p-2 mt-5 text-2xl bg-indigo-300 rounded" id="submit" >
+            Submit
+          </button>
+          </div>
+        </div>
+        <div id="projects" className=" bg-back-blue/90 p-10 m-1 w-4/6 rounded">
+          <h1 class="text-white">projects</h1>
+          <h1>Select Project</h1>
+          <div>{projectTabs}</div>
+        </div>
+
+
+      </div>
     </div>
+
+    
   );
 };
 

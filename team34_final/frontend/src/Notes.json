@@ -1,0 +1,52 @@
+[
+    {
+        "noteID": 0,
+        "projectID": 0,
+        "level": 1,
+        "title": "Text note 1",
+        "tags": [
+            "text",
+            "introductory"
+        ],
+        "type": "text",
+        "content": "Here is some text to display."
+    },
+    {
+        "noteID": 1,
+        "projectID": 0,
+        "level": 0,
+        "title": "File note 1",
+        "tags": [
+            "folder",
+            "introductory"
+        ],
+        "type": "note",
+        "content": [
+            0,
+            2,
+            3
+        ]
+    },
+    {
+        "noteID": 2,
+        "projectID": 0,
+        "level": 1,
+        "title": "Text note 2",
+        "tags": [
+            "internal"
+        ],
+        "type": "text",
+        "content": "Here is another instance of text."
+    },
+    {
+        "noteID": 3,
+        "projectID": 0,
+        "level": 1,
+        "title": "Text note 3",
+        "tags": [
+
+        ],
+        "type": "text",
+        "content": "Here is yet another instance of the powerful note technology."
+    }
+]

@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from '../backend/App';
-import reportWebVitals from './reportWebVitals';
+import Home from './homeView';
+//import App from './App';
+//import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 let state = 0;
 
 root.render(
   <React.StrictMode>
-    <Handler />
+    <Home />
   </React.StrictMode>
 );
 
@@ -51,26 +52,3 @@ then on each note, we have a field called "projectID" as well to tie them togeth
 from that itll just be a ton of js to load everything into their proper containers.
 */
 
-
-function Handler(){
-
-  switch(state){
-    case 0:
-      //state whatever
-      break;
-  }
-
-  return(
-    <div>
-      <h1 class = "text-orange-700"> hi cole</h1>
-      <p>orange above means tailwind works</p>
-    </div>
-  );
-  
-}
-
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

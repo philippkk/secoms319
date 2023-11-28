@@ -58,7 +58,7 @@ const Home = () => {
   if (user === "")
     // Return login
     return (
-      <div id="background" className="h-screen bg-brown p-10 flex">
+      <div id="background" className="h-screen bg-stone-900 p-10 pt-2 flex">
         <div id="login" className=" bg-back-blue/90 p-10 m-1 w-2/6 text-center rounded ">
           <h1 class="text-white p-2 text-3xl ">Login</h1>
           <div>
@@ -88,8 +88,6 @@ const Home = () => {
           <h1 class="text-white text-center text-2xl">...To view projects, please sign in or sign up...</h1>
         
         </div>
-
-
       </div>
     );
   // Return Projects
@@ -112,7 +110,7 @@ const Projects = ({ user, refresh, setProject}) => {
 
   return (
     <div>
-      <div id="background" className="h-screen bg-brown p-10 flex">
+      <div id="background" className="h-screen bg-stone-900 p-10 flex">
         <div id="login" className=" bg-back-blue/90 p-10 m-1 w-2/6 text-center rounded ">
           <h1 class="text-white p-2 text-3xl ">Login</h1>
           <div>

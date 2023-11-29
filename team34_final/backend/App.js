@@ -42,12 +42,21 @@ app.listen(port, () => {
   console.log("App listening at http://%s:%s", host, port);
 });
 
-app.get("/hi", async(req, res) => {
+app.get("/getUsers", async(req, res) => {
   await client.connect();
   console.log("Node connected successfully to GET MongoDB");
   const results = await db
   .collection("users").find({}).toArray();
   console.log(results);
+  res.status(200);
+  res.send(results);
+});
+app.post("/checkPass", async(req, res) => {
+  await client.connect();
+  const keys = Object.keys(req.body);
+  const values = Object.values(req.body);
+  const userName = values[0];
+  const results = await db.collection("users").find({'userName' : userName}).toArray();
   res.status(200);
   res.send(results);
 });

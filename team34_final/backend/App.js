@@ -4,6 +4,7 @@ var app = express();
 var fs = require("fs");
 var bodyParser = require("body-parser");
 const { MongoClient } = require("mongodb");
+var mongodb = require('mongodb');
 const uri =
 "mongodb+srv://philipk:7EwTM0DwxWI1xNAd@coms363.c2vkqro.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri);
@@ -26,7 +27,7 @@ async function main() {
   } catch (e) {
     console.error(e);
   } finally {
-    await client.close();
+    //wait client.close();
   }
 }
 
@@ -76,3 +77,50 @@ app.post("/addUser",async(req,res)=>{
   res.send(results);
 
 });
+
+app.post("/createProject",async(req,res)=>{
+  await client.connect();
+  const keys = Object.keys(req.body);
+  const values = Object.values(req.body);
+  const name = values[0];
+  const notes = values[1];
+  const userName = values[2];
+
+  const newProject = {
+    "name" : name,
+    "notes" : notes,
+    "userName" : userName
+  }
+  const results = await db.collection("projects").insertOne(newProject);
+  res.status(200);
+  res.send(results);
+
+});
+app.post("/getProjects", async(req, res) => {
+  await client.connect();
+  const keys = Object.keys(req.body);
+  const values = Object.values(req.body);
+  const name = values[0];
+  const results = await db.collection("projects").find({'userName' : name}).toArray();
+  //console.log(results);
+  res.status(200);
+  res.send(results);
+});
+
+app.delete("/deleteProject", async (req, res) => {
+  await client.connect();
+  // const keys = Object.keys(req.body);
+  const values = Object.values(req.body);
+  const id = values[0]; // id
+  console.log("project to delete :","new ObjectId('" + id + "')");
+  const query =  { _id : new mongodb.ObjectId(id) };
+  let results = await db.collection("projects").find(query).toArray();
+console.log(results);
+   results = await db.collection("projects").deleteOne(query);
+  res.status(200);
+  res.send(results);
+  });
+
+
+
+

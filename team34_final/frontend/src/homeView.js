@@ -257,7 +257,7 @@ const Projects = ({ user, refresh, setProject }) => {
     />
   ));
 
-  return (
+  return projects.length ? 
     <div>
       <div id="background" className="h-screen bg-stone-900 p-10 flex">
         <div
@@ -288,7 +288,36 @@ const Projects = ({ user, refresh, setProject }) => {
         </div>
       </div>
     </div>
-  );
+  :  <div>
+  <div id="background" className="h-screen bg-stone-900 p-10 flex">
+    <div
+      id="login"
+      className=" bg-stone-500/90 p-10 m-1 w-2/6 text-center rounded  border-2 border-white"
+    >
+      <h1 className="text-white p-2 text-3xl  mt-4 ">Hi, {user}!</h1>
+      <hr></hr>
+      <h1 className="text-white p-2 text-2xl ">choose a project to the right,</h1>
+  
+    </div>
+    <div id="projects" className=" bg-stone-600/90 p-10 m-1 w-4/6 rounded  border-2 border-white">
+    <button className="bg-indigo-400 w-2/12 rounded text-white text-2xl float-right text-center" onClick={loadProjects}>load</button>
+
+      <h1 className="text-white text-2xl pb-5 text-center">Projects</h1> 
+        <div>
+        <button className="bg-indigo-400 w-1/12 rounded text-white text-2xl float-right text-center" onClick={createProject}>+</button>
+        <input
+          className="bg-indigo-300 placeholder-stone-700 w-6/12 mr-5 text-center rounded h-8 text-xl float-right"
+          id="username"
+          onChange={handleProjectName}
+          placeholder="New Project Name..."
+        />
+      </div>
+      
+      <hr></hr>
+     <div id="projectOutput">loadin</div>
+    </div>
+  </div>
+</div>
     
 }
 
@@ -298,7 +327,7 @@ const Project = ({ project, refresh, setProject }) => {
     //Handle project deletion here /////////////////////////////////////////
     // Use proj.projectID
     deleteMethod();
-    //refresh();
+    refresh();
   }
 
   function deleteMethod() {

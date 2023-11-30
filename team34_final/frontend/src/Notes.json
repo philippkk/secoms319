@@ -3,7 +3,6 @@
         "noteID": 0,
         "projectID": 0,
         "level": 1,
-        "parentID": 1,
         "title": "Text note 1",
         "tags": [
             "text",
@@ -16,23 +15,22 @@
         "noteID": 1,
         "projectID": 0,
         "level": 0,
-        "parentID": null,
         "title": "File note 1",
         "tags": [
             "folder",
             "introductory"
         ],
-        "type": "folder",
+        "type": "note",
         "content": [
             0,
-            2
+            2,
+            3
         ]
     },
     {
         "noteID": 2,
         "projectID": 0,
         "level": 1,
-        "parentID": 1,
         "title": "Text note 2",
         "tags": [
             "internal"
@@ -43,8 +41,7 @@
     {
         "noteID": 3,
         "projectID": 0,
-        "level": 0,
-        "parentID": null,
+        "level": 1,
         "title": "Text note 3",
         "tags": [
 

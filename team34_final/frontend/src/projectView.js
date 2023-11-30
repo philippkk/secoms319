@@ -1,42 +1,117 @@
 import React from "react";
 import n from "./Notes.json";
-import { useState } from "react";
+import { _idect, useState } from "react";
 import NoteView from "./noteView";
+import HomeView from "./homeView";
+import Home from "./homeView";
 
 const ProjectView = (projectID) => {
   const [draggedNote, setDraggedNote] = useState(null); // Used for note dragging
   const [view, setView] = useState(-1); // -1 means no note selected
-  const notes = n; // Replace with notes from database //////////////////////////////////////////////////////
-
+  const [Home,setHome] = useState(false);
+  const [num, setNum] = useState(0);
+  const [notess, setNotes] = useState([]);
+  let notes = notess; 
+  fetch("http://localhost:8081/getNotes/"+projectID)
+    .then((response) => response.json())
+    .then((data) => {
+      notes.length = 0;
+      for (let i = 0; i < data.length; i++) {
+        notes[i]=data[i];
+        setNum(data._id)
+      }  
+    }).then(() => {
+      setNotes(notes);
+    });
+    
+  console.log("og notes");
+  console.log(notes);
+  console.log(notes.length)
   function changeView(ID) {
     setView(ID);
   }
+  function createNote(){
+    fetch("http://localhost:8081/createNote", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        "projectID": projectID,
+        "level": 1,
+        "parentID": 0,
+        "title": "New Text Note",
+        "tags": [
+            "text"
+        ],
+        "type": "text",
+        "content": ""
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => { });
+  }
 
-  let note = view === -1 ? null : notes.find((n) => n.noteID === view);
-  return (
-    <div>
-      <SideBar notes={notes} changeView={changeView}  drag={{draggedNote, setDraggedNote}} />
-      <ContentView notes={notes} note={note} changeView={changeView} drag={{draggedNote, setDraggedNote}} />
-    </div>
+  function getNotes(){
+    fetch("http://localhost:8081/getNotes/"+projectID)
+    .then((response) => response.json())
+    .then((data) => {
+      for (let i = 0; i < data.length; i++) {
+        notes.push(data[i]);
+      }
+    });
+  }
+
+  let note = view === -1 ? null : notes.find((n) => n._id === view);
+
+  // console.log("FIND THING: ")
+  // console.log(notes.find((notes) => notes._id === view));
+  // console.log(note);
+  
+  console.log("before return");
+  return Home? (
+    <HomeView/>
+  ):(
+    <div className="bg-stone-900 h-screen p-5 pt-2 flex w-screen overflow-x-scroll">
+    <SideBar notes={notes} changeView={changeView}  drag={{draggedNote, setDraggedNote}} home={{Home,setHome}} createNote={createNote} getNotes={getNotes} projectID={projectID}/>
+    <ContentView notes={notes} note={note} changeView={changeView} drag={{draggedNote, setDraggedNote}} />
+  </div>
   );
 };
 
 const ContentView = ({ notes, note, changeView, drag }) => {
   if (note) {
     return (
-      <div>
-        ---Content--- <br />
+      <div   className="bg-stone-600/90 p-1 m-1 w-11/12 rounded h-14 text-xl h-max border-2 border-white text-white">
+        {note.title} Content<br />
         <NoteView notes={notes} note={note} changeView={changeView} />
       </div>
+    );
+  }else{
+    return(  <div   className="bg-stone-600/90 p-1 m-1 w-11/12 rounded h-14 text-xl h-max border-2 border-white text-white">
+       Double click a note to open it!<br />
+    </div>
     );
   }
 
   return <div></div>;
 };
 
-const SideBar = ({ notes, changeView, drag }) => {
+const SideBar = ({ notes, changeView, drag,home,createNote,getNotes,projectID}) => {
   const [search, setSearch] = useState("");
-  
+  const [num, setNum] = useState(0);
+
+  let notess = [];
+  fetch("http://localhost:8081/getNotes/"+projectID)
+  .then((response) => response.json())
+  .then((data) => {
+    notes.length = 0;
+    for (let i = 0; i < data.length; i++) {
+      notess.push(data[i]);
+    }
+  });
+console.log("SIDEBAR notes length");
+console.log(notess.length);
+
+
   // Saves a note's location
   function save(note) {
     // Implement a DB save function here. Needed when shuffling folders //////////////////////////////////////////////////
@@ -46,15 +121,15 @@ const SideBar = ({ notes, changeView, drag }) => {
   function updateBranch(dNote, newParent) {
     if(dNote.parentID) {
       console.log("Parent:");
-      let parent = notes.find((nt) => nt.noteID === dNote.parentID);
+      let parent = notes.find((nt) => nt._id ===  dNote.parentID);
       console.log(parent);
-      parent.content = parent.content.filter(id => id !== dNote.noteID);
+      parent.content = parent.content.filter(id => id !== dNote._id);
       console.log(parent);
       save(parent);
     }
     if(newParent) {
-      dNote.parentID = newParent.noteID;
-      newParent.content.push(dNote.noteID);
+      dNote.parentID = newParent._id;
+      newParent.content.push(dNote._id);
       updateRecursive(dNote, newParent.level + 1);
     }
     else {
@@ -66,7 +141,7 @@ const SideBar = ({ notes, changeView, drag }) => {
     n.level = newLevel;
     if (n.type === "folder") {
       for (var i = 0; i < n.content.length; i++) {
-        const nt = notes.find((note) => note.noteID === n.content[i]);
+        const nt = notes.find((note) => note._id === n.content[i]);
         if (nt) {
           updateRecursive(nt, newLevel + 1);
         }
@@ -75,7 +150,9 @@ const SideBar = ({ notes, changeView, drag }) => {
     save(n);
   }  
 
-  
+  function goHome(){
+    home.setHome(true);
+  }
   const handleDragOver = (event) => {
     event.preventDefault();
   }
@@ -85,32 +162,53 @@ const SideBar = ({ notes, changeView, drag }) => {
     drag.setDraggedNote(null);
     event.stopPropagation();
   };
+  const baseNotes = notes;
+  // const baseNotes = notes.filter((note) => {
+  //   if (search === "") {
+  //     return note.level == 0;
+  //   }
+  //   return note.title.toLowerCase().includes(search.toLowerCase()) ||
+  //   note.tags.some((tag) => tag.toLowerCase().includes(search.toLowerCase()));
+  // });
+  console.log("baseNotes");
+  console.log(notes);
+  console.log(notes.length);
+  console.log(notes[0]);
 
-  const baseNotes = notes.filter((note) => {
-    if (search === "") {
-      return note.level === 0;
-    }
-    return note.title.toLowerCase().includes(search.toLowerCase()) ||
-    note.tags.some((tag) => tag.toLowerCase().includes(search.toLowerCase()));
-  });
-
+for(let i = 0; i < 3; i++){
+  console.log(i);
+  <SideTab key={i} notes={notes} note={baseNotes[i]} changeView={changeView} drag={drag} update={updateBranch} />
+}
   const baseTabs = baseNotes.map((note, index) => (
     <SideTab key={index} notes={notes} note={note} changeView={changeView} drag={drag} update={updateBranch} />
   ));
 
   return (
-    <div>
+    <div className="bg-stone-500/90 p-1 m-1 w-max text-center rounded h-14 text-xl h-max border-2 border-white">
       <div>
-        <input
+        <input className="rounded-lg text-center m-2 hover:border-indigo-400 border-2 hover:placeholder-indigo-600"
           type="search"
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search"
         />
       </div>
-      <div onDragOver={handleDragOver} onDrop={e => handleDrop(e)}>
-        ---Tabs---
-        <br />
+      <div className="text-white text-2xl"
+      onDragOver={handleDragOver} onDrop={e => handleDrop(e)}>
+        Files
+        <hr></hr>
+        <div >
+        <button className="text-lg text-right m-2 border-2 bg-indigo-300 rounded-lg p-2 py-1 hover:bg-indigo-600 hover:border-indigo-400"
+                    onClick={getNotes}
+
+        >+folder</button>
+          <button className="text-lg text-right m-2 border-2 bg-indigo-400 rounded-lg p-2 py-1 hover:bg-indigo-600 hover:border-indigo-400"
+          onClick={createNote}
+          >+note</button>
+        </div>
+        <hr></hr>
         {baseTabs}
+        <button className="border-white border-2 rounded-lg m-2 p-2 pt-1 bg-indigo-400 hover:bg-indigo-600 hover:border-indigo-400"
+        onClick={goHome}>Log out</button>
       </div>
     </div>
   );
@@ -120,6 +218,9 @@ const SideBar = ({ notes, changeView, drag }) => {
 const SideTab = ({notes, note, changeView, drag, update }) => {
   const [open, setOpen] = useState(true);
   let singleClick = false;
+  console.log("sidetag note");
+  console.log(note);
+
 
   // Functions to handle drag/drop
   const handleDragStart = (event, note) => {
@@ -139,15 +240,15 @@ const SideTab = ({notes, note, changeView, drag, update }) => {
     const n = drag.draggedNote;
     if(note.type !== "folder")
       return;
-    let parentID = note.noteID;// Prevents a note from being it's own descendent
+    let parentID = note._id;// Prevents a note from being it's own descendent
     while(parentID) {
       if(n.ID === parentID) {
         drag.setDraggedNote(null);
         return;
       }
-      parentID = notes.find((nt) => nt.noteID === parentID)?.parentID;
+      parentID = notes.find((nt) => nt._id === parentID)?.parentID;
     }
-    if(!note.content.includes(n.noteID))
+    if(!note.content.includes(n._id))
       update(n, note);
     drag.setDraggedNote(null);
     event.stopPropagation();
@@ -164,15 +265,25 @@ const SideTab = ({notes, note, changeView, drag, update }) => {
         if (singleClick) {
           setOpen(!open);
           singleClick = false;
+          if(open){
+            let str = note.title;
+            str = str.substring(2,str.length);
+            note.title = "v " + str;
+          }else{
+            let str = note.title;
+            str = str.substring(2,str.length);
+            note.title = "> " + str;
+          }
         }
-      }, 500);
+      }, 250);
     }
   }
 
   // Handles double click, and cancels single click
   function handleDblClick() {
     singleClick = false;
-    changeView(note.noteID);
+    changeView(note._id);
+
   }
 
   // Generates subNotes for current note (if note.content === folder)
@@ -180,14 +291,14 @@ const SideTab = ({notes, note, changeView, drag, update }) => {
     if (open || note.type !== "folder") {
       return false;
     }
-    return note.content.includes(n.noteID);
+    return note.content.includes(n._id);
   });
   const subTabs = subNotes.map((n, index) => (
     <SideTab key={index} notes={notes} note={n} changeView={changeView} drag={drag} />
   ));
 
   return (
-    <div
+    <div className="text-left ml-4 hover:text-gray-300"
       draggable
       onDragStart={(event) => handleDragStart(event, note)}
       onDragOver={handleDragOver}
@@ -198,6 +309,7 @@ const SideTab = ({notes, note, changeView, drag, update }) => {
         onDoubleClick={() => handleDblClick()}
       >
         {note.title}
+        <hr></hr>
       </button>
       {subTabs}
     </div>

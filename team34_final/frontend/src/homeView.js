@@ -117,7 +117,7 @@ const Home = () => {
           className=" bg-stone-500/90 p-10 m-1 w-2/6 text-center rounded  border-2 border-white "
         > 
           <div>
-          <h1 className="text-left">TITLE</h1>
+          <h1 className="text-left text-white text-3xl">Project Manager</h1>
           <hr></hr>
           </div>  
           <h1 className="text-white p-2 text-3xl mt-4">Login</h1>
@@ -259,7 +259,7 @@ const Projects = ({ user, refresh, setProject }) => {
 
   return projects.length ? 
     <div>
-      <div id="background" className="h-screen bg-stone-900 p-10 flex">
+      <div id="background" className="h-screen bg-stone-900 p-10 pt-2 flex">
         <div
           id="login"
           className=" bg-stone-500/90 p-10 m-1 w-2/6 text-center rounded  border-2 border-white"
@@ -289,7 +289,7 @@ const Projects = ({ user, refresh, setProject }) => {
       </div>
     </div>
   :  <div>
-  <div id="background" className="h-screen bg-stone-900 p-10 flex">
+  <div id="background" className="h-screen bg-stone-900 p-10 pt-2 flex">
     <div
       id="login"
       className=" bg-stone-500/90 p-10 m-1 w-2/6 text-center rounded  border-2 border-white"
@@ -314,7 +314,7 @@ const Projects = ({ user, refresh, setProject }) => {
       </div>
       
       <hr></hr>
-     <div id="projectOutput">loadin</div>
+     <div id="projectOutput" className="text-white text-2xl">loadin...</div>
     </div>
   </div>
 </div>

@@ -121,6 +121,40 @@ console.log(results);
   res.send(results);
   });
 
+  app.post("/createNote", async(req, res) => {
+    await client.connect();
+    const keys = Object.keys(req.body);
+    const values = Object.values(req.body);
+    const projectID = values[0];
+    const level = values[1];
+    const parentID = values[2];
+    const title = values[3];
+    const tags = values[4];
+    const type = values[5];
+    const content = values[6];
 
+    let note = {
+      "projectID": projectID,
+      "level": level,
+      "parentID": parentID,
+      "title": title,
+      "tags": tags,
+      "type": type,
+      "content": content
+    };
+    console.log(note);
+    const results = await db.collection("notes").insertOne(note);   
+    res.status(200);
+    res.send(results);
+  });
 
+  app.get("/getNotes/:id", async(req, res) => {
+    const projectID = Number(req.params.id);
+    await client.connect();
+    const query = {"projectID":{"projectID":projectID}};
 
+    const results = await db.collection("notes").find({}).toArray();
+    console.log(results);
+    res.status(200);
+    res.send(results);
+  });

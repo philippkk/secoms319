@@ -1,3 +1,27 @@
 [
-
+    {
+        "projectID": 0,
+        "name": "Project 0",
+        "notes": 1
+    },
+    {
+        "projectID": 1,
+        "name": "Project 1",
+        "notes": 2
+    },
+    {
+        "projectID": 2,
+        "name": "Project 2",
+        "notes": 5
+    },
+    {
+        "projectID": 3,
+        "name": "Project 3",
+        "notes": 2
+    },
+    {
+        "projectID": 4,
+        "name": "Project 4",
+        "notes": 7
+    }
 ]

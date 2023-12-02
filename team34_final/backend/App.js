@@ -142,11 +142,12 @@ console.log(results);
       "type": type,
       "content": content
     };
-    console.log(note);
+    //console.log(note);
     const results = await db.collection("notes").insertOne(note);   
     res.status(200);
     res.send(results);
   });
+
 
   app.get("/getNotes/:id", async(req, res) => {
     const projectID = Number(req.params.id);
@@ -154,7 +155,69 @@ console.log(results);
     const query = {"projectID":{"projectID":projectID}};
 
     const results = await db.collection("notes").find({}).toArray();
-    console.log(results);
+    //console.log(results);
     res.status(200);
     res.send(results);
   });
+
+  app.post("/updateNote/:id", async(req, res) => {
+    await client.connect();
+    const keys = Object.keys(req.body);
+    const values = Object.values(req.body);
+    const noteid = String(req.params.id);
+    const title = values[0];
+    const content = values[1];
+    const tags = values[2];
+    //console.log(note);
+    var query = {"_id":new mongodb.ObjectId(noteid)};
+    var newvalues = { $set: {"title": title,"content":content, "tags":tags} };
+    const results = await db.collection("notes").updateOne(query, newvalues, function(err, res) {
+      if (err) throw err;
+      console.log("1 document updated");
+    });   
+    res.status(200);
+    res.send(results);
+  });
+
+
+  app.get("/setParent/:id/:parent", async(req, res) => {
+    await client.connect();
+    const keys = Object.keys(req.body);
+    const values = Object.values(req.body);
+    const noteid = String(req.params.id);
+    const parentid = String(req.params.parent);
+
+    console.log("PARENT ID " +parentid);
+    console.log("note ID " +noteid);
+
+
+    var query = {"_id":new mongodb.ObjectId(parentid)};
+    const folder = await db.collection("notes").find(query).toArray();
+    var cont = folder.content;
+    console.log("CONTENT OF FOLDER" + cont);
+    var newvalues = { $set: {"content": [noteid]} };
+    const resu = await db.collection("notes").updateOne(query, newvalues, function(err, res) {
+      if (err) throw err;
+      console.log("1 document updated");
+    });   
+
+  query = {"_id":new mongodb.ObjectId(noteid)};
+  newvalues = { $set: {parentID: parentid, level:1} };
+  //  ress.parentID = parentid;
+    const results = await db.collection("notes").updateOne(query, newvalues, function(err, res) {
+      if (err) throw err;
+      console.log("1 document updated");
+      db.close();
+    });   
+    res.status(200);
+    res.send(results);
+  });
+
+  app.delete("/deleteNote/:id", async (req, res) => {
+    await client.connect();
+    const noteid = String(req.params.id);
+    var query = {"_id":new mongodb.ObjectId(noteid)};
+    const results = await db.collection("notes").deleteOne(query);
+    res.status(200);
+    res.send(results);
+    });

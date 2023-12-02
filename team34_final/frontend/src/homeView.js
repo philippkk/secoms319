@@ -162,12 +162,23 @@ const Home = () => {
           id="projects"
           className=" bg-stone-600/90 p-10 m-1 w-4/6 rounded flex justify-center items-center  border-2 border-white"
         >
-          
+          <div>
           <h1 className="text-white text-center text-2xl">
             ...To view projects, please sign in or sign up...
             <hr></hr>
+            
           </h1>
-          
+          <h1 className="text-white text-center text-xl">
+          <br></br>
+            SE/ComS319 Construction of User Interfaces, Fall 2023, 12/3/23
+            <br></br>
+            Philip King, philipk@iastate.edu
+            <br></br>
+            Cole Boltjes, cboltjes@iastate.edu
+            <br></br>
+            Dr. Abraham N. Aldaco Gastelum
+          </h1>
+          </div>
         </div>
       </div>
     );

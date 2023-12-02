@@ -1,7 +1,7 @@
 import React, { useState} from "react";
 
 const NoteView = ({ notes, note, changeView }) => {
-  const [currentID, setCurrentID] = useState(note.noteID);
+  const [currentID, setCurrentID] = useState(note._id);
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [tags, setTags] = useState(note.tags);
@@ -11,11 +11,30 @@ const NoteView = ({ notes, note, changeView }) => {
     note.content = content;
     note.title = title;
     note.tags = tags;
-    // Implement note saving here ///////////////////////////////////////////////////////
+
+    fetch("http://localhost:8081/updateNote/"+note._id, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        "title": title,
+        "content": content,
+        "tags":tags,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => { });
+  }
+
+  function deletee() {
+    fetch('http://localhost:8081/deleteNote/'+note._id, {
+      method: "DELETE",
+      headers: { 'content-type': 'application/json' }
+  })
   }
   
-  if(note.noteID !== currentID) {
-    setCurrentID(note.noteID);
+  if(note._id !== currentID) {
+    console.log("CHANGE VIEW");
+    setCurrentID(note._id);
     setTitle(note.title);
     setContent(note.content);
     setTags(note.tags);
@@ -45,6 +64,8 @@ const NoteView = ({ notes, note, changeView }) => {
         <div>Tags: <hr className="m-1"></hr>{tagDiv}</div>
         <button className="border-white border-2 rounded-lg m-2 p-2 pt-1 bg-indigo-400 hover:bg-indigo-600"
         onClick={() => save()}>Save</button>
+                <button className="border-white border-2 rounded-lg m-2 p-2 pt-1 bg-indigo-400 hover:bg-indigo-600"
+        onClick={() => deletee()}>Delete</button>
       </div>
     );
   }

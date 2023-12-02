@@ -18,15 +18,46 @@ const ProjectView = (projectID) => {
       notes.length = 0;
       for (let i = 0; i < data.length; i++) {
         notes[i]=data[i];
-        setNum(data._id)
       }  
+      // if(data[0] != null){
+      //   if(num == data[0]._id){
+      //     if(data[1] != null){
+      //     setNum(data[1]._id)
+      //     }
+      //   }else{        
+      //     setNum(data[0]._id)
+      //   }
+      // }
+
     }).then(() => {
       setNotes(notes);
     });
-    
+  
   console.log("og notes");
   console.log(notes);
   console.log(notes.length)
+  if(notes.length == 0){
+    fetch("http://localhost:8081/getNotes/"+projectID)
+    .then((response) => response.json())
+    .then((data) => {
+      notes.length = 0;
+      for (let i = 0; i < data.length; i++) {
+        notes[i]=data[i];
+      }  
+      if(data[0] != null){
+        if(num == data[0]._id){
+          if(data[1] != null){
+          setNum(data[1]._id)
+          }
+        }else{        
+          setNum(data[0]._id)
+        }
+      }
+
+    }).then(() => {
+      setNotes(notes);
+    });
+  }
   function changeView(ID) {
     setView(ID);
   }
@@ -36,7 +67,7 @@ const ProjectView = (projectID) => {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         "projectID": projectID,
-        "level": 1,
+        "level": 0,
         "parentID": 0,
         "title": "New Text Note",
         "tags": [
@@ -47,16 +78,38 @@ const ProjectView = (projectID) => {
       }),
     })
       .then((response) => response.json())
-      .then((data) => { });
+      .then((data) => { getNotes(); });
   }
 
+  function createFolder(){
+    fetch("http://localhost:8081/createNote", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        "projectID": projectID,
+        "level": 0,
+        "parentID": 0,
+        "title": "> New Folder",
+        "tags": [
+            "folder"
+        ],
+        "type": "folder",
+        "content": []
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => { });
+  }
   function getNotes(){
     fetch("http://localhost:8081/getNotes/"+projectID)
     .then((response) => response.json())
     .then((data) => {
+      notes.length = 0;
       for (let i = 0; i < data.length; i++) {
         notes.push(data[i]);
+        setNum(data[0]._id)
       }
+      
     });
   }
 
@@ -71,7 +124,7 @@ const ProjectView = (projectID) => {
     <HomeView/>
   ):(
     <div className="bg-stone-900 h-screen p-5 pt-2 flex w-screen overflow-x-scroll">
-    <SideBar notes={notes} changeView={changeView}  drag={{draggedNote, setDraggedNote}} home={{Home,setHome}} createNote={createNote} getNotes={getNotes} projectID={projectID}/>
+    <SideBar notes={notes} changeView={changeView}  drag={{draggedNote, setDraggedNote}} home={{Home,setHome}} createNote={createNote} getNotes={getNotes} projectID={projectID} createfolder={createFolder}/>
     <ContentView notes={notes} note={note} changeView={changeView} drag={{draggedNote, setDraggedNote}} />
   </div>
   );
@@ -95,7 +148,7 @@ const ContentView = ({ notes, note, changeView, drag }) => {
   return <div></div>;
 };
 
-const SideBar = ({ notes, changeView, drag,home,createNote,getNotes,projectID}) => {
+const SideBar = ({ notes, changeView, drag,home,createNote,getNotes,projectID,createfolder}) => {
   const [search, setSearch] = useState("");
   const [num, setNum] = useState(0);
 
@@ -162,20 +215,19 @@ console.log(notess.length);
     drag.setDraggedNote(null);
     event.stopPropagation();
   };
-  const baseNotes = notes;
-  // const baseNotes = notes.filter((note) => {
-  //   if (search === "") {
-  //     return note.level == 0;
-  //   }
-  //   return note.title.toLowerCase().includes(search.toLowerCase()) ||
-  //   note.tags.some((tag) => tag.toLowerCase().includes(search.toLowerCase()));
-  // });
+  const baseNotes = notes.filter((note) => {
+    if (search === "") {
+            return note.level == 0;
+    }
+    return note.title.toLowerCase().includes(search.toLowerCase()) ||
+    note.tags.some((tag) => tag.toLowerCase().includes(search.toLowerCase()));
+  });
   console.log("baseNotes");
   console.log(notes);
   console.log(notes.length);
   console.log(notes[0]);
 
-for(let i = 0; i < 3; i++){
+for(let i = 0; i <notes.length; i++){
   console.log(i);
   <SideTab key={i} notes={notes} note={baseNotes[i]} changeView={changeView} drag={drag} update={updateBranch} />
 }
@@ -197,10 +249,10 @@ for(let i = 0; i < 3; i++){
         Files
         <hr></hr>
         <div >
-        <button className="text-lg text-right m-2 border-2 bg-indigo-300 rounded-lg p-2 py-1 hover:bg-indigo-600 hover:border-indigo-400"
-                    onClick={getNotes}
+        {/* <button className="text-lg text-right m-2 border-2 bg-indigo-300 rounded-lg p-2 py-1 hover:bg-indigo-600 hover:border-indigo-400"
+                    onClick={createfolder}
 
-        >+folder</button>
+        >+folder</button> */}
           <button className="text-lg text-right m-2 border-2 bg-indigo-400 rounded-lg p-2 py-1 hover:bg-indigo-600 hover:border-indigo-400"
           onClick={createNote}
           >+note</button>
@@ -229,6 +281,7 @@ const SideTab = ({notes, note, changeView, drag, update }) => {
     console.log(note);
     event.dataTransfer.setData('text/plain', ''); // Setting some data for the drag operation
     event.stopPropagation();
+
   };
 
   const handleDragOver = (event) => {
@@ -241,13 +294,22 @@ const SideTab = ({notes, note, changeView, drag, update }) => {
     if(note.type !== "folder")
       return;
     let parentID = note._id;// Prevents a note from being it's own descendent
-    while(parentID) {
-      if(n.ID === parentID) {
+    console.log("PARNET ID 1 " + n._id);
+      if(n._id === parentID) {
         drag.setDraggedNote(null);
         return;
       }
-      parentID = notes.find((nt) => nt._id === parentID)?.parentID;
-    }
+      parentID = notes.find((nt) => nt._id === parentID)?._id;
+      console.log("NOTE ID " + n._id);
+      console.log("PARNET ID " + parentID);
+
+      fetch("http://localhost:8081/setParent/"+n._id+"/"+parentID)
+      .then((response) => response)
+      .then((data) => {
+      }).then(() => {
+      });
+      
+    
     if(!note.content.includes(n._id))
       update(n, note);
     drag.setDraggedNote(null);

@@ -82,7 +82,7 @@ const NoteView = ({ notes, setNotes, note, changeView, refresh, setSearch }) => 
           </div>
         </div>
         <div>
-          <div class="">
+          <div className="mt-10">
             <label for="message" class="block mb-2 ">
               Description
             </label>
@@ -98,7 +98,13 @@ const NoteView = ({ notes, setNotes, note, changeView, refresh, setSearch }) => 
           </div>
         </div>
         <div>
-          Tags: <hr className="m-1"></hr>
+        <div className="flex mt-10">
+        <h1 className="mr-2">Tags:  </h1>    
+         {tags.map((tag) => (
+        <Tag name={tag} setSearch={setSearch} />
+          ))} 
+          </div>
+      <hr className="m-1"></hr>
           {tagDiv}
         </div>
         <button
@@ -144,7 +150,7 @@ const NoteView = ({ notes, setNotes, note, changeView, refresh, setSearch }) => 
         </div>
       </div>
       <div>
-        <div class="">
+        <div className="mt-10">
           <label for="message" class="block mb-2 ">
             Content
           </label>
@@ -153,8 +159,15 @@ const NoteView = ({ notes, setNotes, note, changeView, refresh, setSearch }) => 
         </div>
       </div>
       <div>
-        Tags: <hr className="m-1"></hr>
+        <div className="flex mt-10">
+        <h1 className="mr-2">Tags:  </h1>    
+         {tags.map((tag) => (
+        <Tag name={tag} setSearch={setSearch} />
+          ))} 
+          </div>
+      <hr className="m-1"></hr>
         {tagDiv}
+        <hr className="m-1"></hr>
       </div>
       <button
         className="border-white border-2 rounded-lg m-2 p-2 pt-1 bg-indigo-400 hover:bg-indigo-600"
@@ -175,28 +188,33 @@ const NoteView = ({ notes, setNotes, note, changeView, refresh, setSearch }) => 
 const Tags = ({ tags, setTags, setSearch }) => {
   const [newTag, setNewTag] = useState("");
   function handleAdd() {
-    setTags([...tags, newTag]);
+    setTags([...tags, "," + newTag]);
     setNewTag("");
   }
   function handleRemove() {
-    setTags(tags.filter((t) => t !== newTag));
+    setTags(tags.filter((t) => t !== "," + newTag));
+
   }
 
   return (
     <div>
-      {tags.map((tag) => (
-        <Tag name={tag} setSearch={setSearch} />
-      ))}
-      <textarea
-        id="message"
-        rows="1"
-        value={newTag}
-        onChange={(e) => setNewTag(e.target.value)}
-        className="block p-2.5 w-5.12 text-lg rounded-lg border border-gray-300 bg-indigo-300 border-gray-600 placeholder-stone-700 text-stone-700 focus:ring-blue-500 focus:border-blue-500 hover:border-white"
-        placeholder="Tag"
-      ></textarea>
-      <button onClick={() => {handleAdd();}}>+</button>
-      <button onClick={() => {handleRemove();}}>-</button>
+
+      <div className="flex">
+        <h1 className="mr-2">Add Tag:</h1>
+        <textarea
+          id="message"
+          rows="1"
+          value={newTag}
+          onChange={(e) => setNewTag(e.target.value)}
+          className="block p-2.5 w-5.12 text-lg rounded-lg border border-gray-300 bg-indigo-300 border-gray-600 placeholder-stone-700 text-stone-700 focus:ring-blue-500 focus:border-blue-500 hover:border-white"
+          placeholder="Enter Tag..."
+        ></textarea>
+          <button className="mx-2 bg-indigo-400 rounded-lg p-4 pt-1 border-white border-2 hover:bg-indigo-600"
+      onClick={() => {handleAdd();}}>+</button>
+      <button className="mr-2 bg-indigo-400 rounded-lg p-4 pt-1 border-white border-2 hover:bg-indigo-600"
+      onClick={() => {handleRemove();}}>-</button>
+      </div>
+    
     </div>
   );
 };

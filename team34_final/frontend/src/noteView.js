@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const NoteView = ({ notes, setNotes, note, changeView, refresh }) => {
+const NoteView = ({ notes, setNotes, note, changeView, refresh, setSearch }) => {
   const [currentID, setCurrentID] = useState(note._id);
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
@@ -61,7 +61,7 @@ const NoteView = ({ notes, setNotes, note, changeView, refresh }) => {
     setTags(note.tags);
   }
 
-  const tagDiv = <Tags tags={tags} />;
+  const tagDiv = <Tags tags={tags} setTags={setTags} setSearch={setSearch} />;
   if (note.type === "text") {
     return (
       <div className="m-5">
@@ -172,18 +172,37 @@ const NoteView = ({ notes, setNotes, note, changeView, refresh }) => {
   );
 };
 
-const Tags = ({ tags }) => {
+const Tags = ({ tags, setTags, setSearch }) => {
+  const [newTag, setNewTag] = useState("");
+  function handleAdd() {
+    setTags([...tags, newTag]);
+    setNewTag("");
+  }
+  function handleRemove() {
+    setTags(tags.filter((t) => t !== newTag));
+  }
+
   return (
     <div>
       {tags.map((tag) => (
-        <Tag name={tag} />
+        <Tag name={tag} setSearch={setSearch} />
       ))}
+      <textarea
+        id="message"
+        rows="1"
+        value={newTag}
+        onChange={(e) => setNewTag(e.target.value)}
+        className="block p-2.5 w-5.12 text-lg rounded-lg border border-gray-300 bg-indigo-300 border-gray-600 placeholder-stone-700 text-stone-700 focus:ring-blue-500 focus:border-blue-500 hover:border-white"
+        placeholder="Tag"
+      ></textarea>
+      <button onClick={() => {handleAdd();}}>+</button>
+      <button onClick={() => {handleRemove();}}>-</button>
     </div>
   );
 };
 
-const Tag = ({ name }) => {
-  return <button>{name}</button>;
+const Tag = ({ name, setSearch }) => {
+  return <button onClick={() => {setSearch(name);}}>{name}</button>;
 };
 
 const Note = ({ note, changeView }) => {

@@ -12,6 +12,7 @@ const ProjectView = ({projectID}) => {
   const [notes, setNotes] = useState([]);
   const [fetched, setFetched] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [search, setSearch] = useState("");
 
   if(!fetched) {
   fetch("http://localhost:8081/getNotes/"+projectID)
@@ -89,18 +90,18 @@ const ProjectView = ({projectID}) => {
     <HomeView/>
   ):(
     <div className="bg-stone-900 h-screen p-5 pt-2 flex w-screen overflow-x-scroll">
-    <SideBar notes={notes} changeView={changeView}  drag={{draggedNote, setDraggedNote}} home={{Home,setHome}} createNote={createNote} refresh={handleRefresh}/>
-    <ContentView notes={notes} setNotes={setNotes} note={note} changeView={changeView} drag={{draggedNote, setDraggedNote}} refresh={() => handleRefresh()} />
+    <SideBar notes={notes} changeView={changeView}  drag={{draggedNote, setDraggedNote}} home={{Home,setHome}} createNote={createNote} refresh={handleRefresh} search={search} setSearch={setSearch}/>
+    <ContentView notes={notes} setNotes={setNotes} note={note} changeView={changeView} drag={{draggedNote, setDraggedNote}} refresh={() => handleRefresh()} setSearch={setSearch}/>
   </div>
   );
 };
 
-const ContentView = ({ notes, setNotes, note, changeView, drag, refresh }) => {
+const ContentView = ({ notes, setNotes, note, changeView, refresh, setSearch }) => {
   if (note) {
     return (
       <div   className="bg-stone-600/90 p-1 m-1 w-11/12 rounded h-14 text-xl h-max border-2 border-white text-white">
         {note.title} Content<br />
-        <NoteView notes={notes} setNotes={setNotes} note={note} changeView={changeView} refresh={refresh} />
+        <NoteView notes={notes} setNotes={setNotes} note={note} changeView={changeView} refresh={refresh} setSearch={setSearch} />
       </div>
     );
   }else{
@@ -111,9 +112,7 @@ const ContentView = ({ notes, setNotes, note, changeView, drag, refresh }) => {
   }
 };
 
-const SideBar = ({ notes, changeView, drag,home,createNote, refresh}) => {
-  const [search, setSearch] = useState("");
-
+const SideBar = ({ notes, changeView, drag,home,createNote, refresh, search, setSearch}) => {
   // Saves a note's location
   function save(note) {
     // Implement a DB save function here. Needed when shuffling folders //////////////////////////////////////////////////

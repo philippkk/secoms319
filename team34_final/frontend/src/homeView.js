@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import p from "./Projects.json"; // Delete when DB's incorporated
 import ProjectView from "./projectView";
 
 const Home = () => {
@@ -14,7 +13,7 @@ const Home = () => {
   function setProject(ID) {
     setProjectID(ID);
   }
-  // Used to component to refresh
+  // Use hook to refresh
   function handleRefresh() {
     setRefresh((prevRefresh) => !prevRefresh);
   }
@@ -192,12 +191,9 @@ const Home = () => {
 
 // Returns several project based on the user
 const Projects = ({ user, refresh, setProject }) => {
-  let projects; // Should be an array of projects
-  projects = p;
+  const [projects, setProjects] = useState([]);
   const [projectName, setProjectName] = useState("");
   const [num , setNum] = useState('');
-  
-
 
   const handleProjectName = (event) => {
     setProjectName("");
@@ -230,7 +226,7 @@ const Projects = ({ user, refresh, setProject }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        projects.length = 0;
+        let p = [];
         for(let i = 0; i<data.length;i++){
         var doc = {  
           "projectID": data[i]._id,
@@ -238,7 +234,8 @@ const Projects = ({ user, refresh, setProject }) => {
           "notes": data[i].notes,
           "userName" : data[i].userName
         }
-        projects.push(doc);
+        p.push(doc);
+        setProjects(p);
       }
       });
   };
@@ -265,6 +262,8 @@ const Projects = ({ user, refresh, setProject }) => {
       project={project}
       refresh={refresh}
       setProject={() => setProject(project.projectID)}
+      projects={projects}
+      setProjects={(p) => setProjects(p)}
     />
   ));
 
@@ -333,12 +332,9 @@ const Projects = ({ user, refresh, setProject }) => {
 }
 
 // Returns an individual project
-const Project = ({ project, refresh, setProject }) => {
+const Project = ({ project, refresh, setProject, projects, setProjects }) => {
   function remove() {
-    //Handle project deletion here /////////////////////////////////////////
-    // Use proj.projectID
     deleteMethod();
-    refresh();
   }
 
   function deleteMethod() {
@@ -352,12 +348,10 @@ const Project = ({ project, refresh, setProject }) => {
         )
     })
         .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            var container = document.getElementById("showData");
-            container.innerHTML = JSON.stringify(data);
+        .then(() => {
+            setProjects(projects.filter((p) => p.projectID !== project.projectID));
         })
-        .catch((err) => console.log("Errror:" + err))
+        .catch((err) => console.log("" + err))
   }
   return (
     <div id="projectContainer">

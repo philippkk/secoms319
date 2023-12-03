@@ -162,6 +162,7 @@ console.log(results);
 
   app.post("/updateNote/:id", async(req, res) => {
     await client.connect();
+    console.log("Updated Note");
     const keys = Object.keys(req.body);
     const values = Object.values(req.body);
     const noteid = String(req.params.id);
@@ -179,6 +180,25 @@ console.log(results);
     res.send(results);
   });
 
+  app.post("/updateNoteLocation/:id", async(req, res) => {
+    console.log("Updated Note");
+    await client.connect();
+    const keys = Object.keys(req.body);
+    const values = Object.values(req.body);
+    const noteid = String(req.params.id);
+    const parentID = values[0];
+    const level = values[1];
+    const content = values[2];
+    //console.log(note);
+    var query = {"_id":new mongodb.ObjectId(noteid)};
+    var newvalues = { $set: {"parentID":parentID, "level":level, "content":content} };
+    const results = await db.collection("notes").updateOne(query, newvalues, function(err, res) {
+      if (err) throw err;
+      console.log("1 document updated");
+    });   
+    res.status(200);
+    res.send(results);
+  });
 
   app.get("/setParent/:id/:parent", async(req, res) => {
     await client.connect();

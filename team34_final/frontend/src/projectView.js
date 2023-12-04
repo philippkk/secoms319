@@ -1,5 +1,4 @@
 import React from "react";
-import n from "./Notes.json";
 import { _idect, useState } from "react";
 import NoteView from "./noteView";
 import HomeView from "./homeView";
